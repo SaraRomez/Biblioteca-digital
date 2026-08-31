@@ -204,3 +204,88 @@ a {
     color: var(--text-muted); 
 }
 
+/*MAIN*/
+
+.main-content { 
+    width: calc(100% - var(--sidebar-width)); 
+    margin-left: var(--sidebar-width); 
+    min-height: 100vh; 
+    padding: 0 48px; 
+}
+
+/*TOPBAR*/
+
+.topbar { 
+    height: 92px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 30px; 
+}
+
+/*BUSCADOR*/
+
+.search-box { 
+    width: min(450px, 100%); 
+    height: 44px; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    padding: 0 13px; 
+    background: var(--bg-soft); 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    color: var(--text-muted); 
+    transition: border var(--transition); 
+}
+
+.search-box:focus-within { 
+    border-color: rgba(201, 166, 107, 0.35); 
+}
+
+.search-box i { 
+    font-size: 13px; 
+}
+
+.search-box input { 
+    flex: 1; 
+    min-width: 0; 
+    border: none; 
+    outline: none; 
+    background: transparent; 
+    color: var(--text-primary); 
+    font-size: 13px; 
+}
+
+.search-box input::placeholder { 
+    color: var(--text-muted); 
+} 
+
+.search-shortcut { 
+    padding: 3px 7px; 
+    background: rgba(255, 255, 255, 0.05); 
+    border: 1px solid var(--border); 
+    border-radius: 5px; 
+    color: var(--text-muted); 
+    font-size: 10px; 
+}
+
+/*PERFIL*/
+
+.profile-button { 
+    width: 38px; 
+    height: 38px; 
+    flex-shrink: 0; 
+    border-radius: 50%; 
+    background: #75634d; 
+    color: #f4ead9; 
+    font-size: 11px; 
+    font-weight: 700; 
+}
+
+/*LOGO MOVIL*/
+
+.mobile-logo { 
+    display: none; 
+}
+
