@@ -665,3 +665,55 @@ a {
     color: #514d48; 
 }
 
+/*
+    ESTADO DEL LIBRO
+*/
+
+.book-status { 
+    position: absolute; 
+    top: 9px; 
+    left: 9px; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    padding: 5px 7px; 
+    border-radius: 5px; 
+    background: rgba(15, 14, 13, 0.78); 
+    backdrop-filter: blur(8px); 
+    color: #eee; 
+    font-size: 7px; 
+    font-weight: 700; 
+    letter-spacing: 0.8px; 
+} 
+
+.book-status.new { 
+    color: var(--accent-light);
+} 
+
+.read-status { 
+    background: rgba(31, 48, 30, 0.9); 
+    color: #b6cbaa; 
+}
+
+/*
+    LIBRO LEÍDO
+*/
+
+.book-card.read { 
+    padding: 7px; 
+    background: rgba(140, 167, 124, 0.035);
+    border: 1px solid rgba(140, 167, 124, 0.07); 
+    border-radius: 13px; 
+    transition: background var(--transition), 
+    border var(--transition); 
+} 
+
+.book-card.read:hover { 
+    background: rgba(140, 167, 124, 0.065); 
+    border-color: rgba(140, 167, 124, 0.14); 
+} 
+
+.book-card.read .book-info { 
+    padding: 0 4px 5px; 
+}
+
