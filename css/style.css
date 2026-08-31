@@ -717,3 +717,39 @@ a {
     padding: 0 4px 5px; 
 }
 
+/*
+    FAVORITOS
+*/
+
+.favorite-button { 
+    position: absolute; 
+    top: 9px; 
+    right: 9px; 
+    width: 30px; 
+    height: 30px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: rgba(15, 14, 13, 0.68); 
+    backdrop-filter: blur(8px); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    border-radius: 50%; 
+    color: rgba(255, 255, 255, 0.7); 
+    font-size: 11px; 
+    opacity: 0; 
+    transform: translateY(3px);
+    transition: 
+        opacity var(--transition), 
+        transform var(--transition), 
+        color var(--transition); 
+}
+
+.book-card:hover .favorite-button { 
+    opacity: 1; 
+    transform: translateY(0); 
+} 
+
+.favorite-button:hover { 
+    color: var(--accent-light); 
+}
+
