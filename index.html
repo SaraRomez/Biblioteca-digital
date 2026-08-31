@@ -27,7 +27,7 @@
 <body>
     <div class="app">
         <!-- SIDEBAR -->
-         <aside class="sidebar">
+        <aside class="sidebar">
             <!-- parte superior -->
             <div class="sidebar-top">
                 <a href="#" class="logo">
@@ -98,13 +98,43 @@
                 </a>
 
             </div>
-         </aside>
+        </aside>
 
-         <!-- CONTENIDO PRINCIPAL-->
+        <!-- CONTENIDO PRINCIPAL-->
+        <main class="main-content">
+            <!-- HEADER -->
+            <header class="topbar">
+                <!-- Logo Movil -->
+                <div class="mobile-logo">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span> Mi Biblioteca </span>
+                </div>
 
-         
-         
+                <!-- Buscador -->
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        id="global-search"
+                        type="search"
+                        placeholder="Busca aquí"
+                        aria-label="Buscar libros"
+                    >
 
+                    <span class="search-shortcut">
+                        ⌘ K
+                    </span>
+                </div>
+
+                <!-- Perfil -->
+                <button class="profile-button" aria-label="Perfil">
+                    SR
+                </button>
+            </header>
+
+            
+
+
+        </main>
     </div>
 </body>
 </html>
