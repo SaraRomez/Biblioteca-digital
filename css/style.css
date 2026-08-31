@@ -753,3 +753,41 @@ a {
     color: var(--accent-light); 
 }
 
+/*
+    ESTADO VACÍO
+*/
+
+.empty-state { 
+    padding: 70px 20px; 
+    text-align: center; 
+    background: var(--bg-soft); 
+    border: 1px solid var(--border); 
+    border-radius: var(--radius-large); 
+}
+
+.empty-icon { 
+    width: 60px; 
+    height: 60px; 
+    margin: 0 auto 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: rgba(201, 166, 107, 0.1); 
+    color: var(--accent); 
+    border-radius: 16px; 
+    font-size: 22px; 
+}
+
+.empty-state h2 { 
+    margin-bottom: 8px; 
+    font-family: Arial, "Playfair Display", serif; 
+    font-size: 25px; 
+}
+
+.empty-state p { 
+    max-width: 450px; 
+    margin: 0 auto; 
+    color: var(--text-secondary); 
+    font-size: 13px; 
+}
+
