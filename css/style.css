@@ -510,3 +510,46 @@ a {
     font-weight: 600; 
 }
 
+/*
+    SECCIONES
+*/
+
+.library-section { 
+    margin-bottom: 64px; 
+}
+
+.section-header { 
+    display: flex; 
+    align-items: flex-end; 
+    justify-content: space-between; 
+    margin-bottom: 25px; 
+}
+
+.section-eyebrow { 
+    margin-bottom: 6px; 
+}
+
+.section-header h2 { 
+    font-family: Arial, "Playfair Display", serif; 
+    font-size: 28px; 
+    font-weight: 600; 
+    /*letter-spacing: -0.5px;*/ 
+}
+
+.view-all { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    color: var(--text-secondary); 
+    font-size: 15px; 
+    transition: color var(--transition); 
+}
+
+.view-all:hover { 
+    color: var(--accent-light); 
+} 
+
+.view-all i { 
+    font-size: 10px; 
+}
+
