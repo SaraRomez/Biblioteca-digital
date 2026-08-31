@@ -462,3 +462,51 @@ a {
     border-radius: 2px; 
 }
 
+/*
+    ESTADÍSTICAS
+*/
+
+.stats-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 13px; 
+    margin-bottom: 55px; 
+}
+
+.stat-card { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    padding: 18px; 
+    background: var(--bg-soft); 
+    border: 1px solid var(--border); 
+    border-radius: var(--radius-medium); 
+}
+
+.stat-icon { 
+    width: 40px; 
+    height: 40px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-shrink: 0; 
+    background: rgba(201, 166, 107, 0.10); 
+    color: var(--accent); 
+    border-radius: 10px; 
+    font-size: 14px; 
+}
+
+.stat-label { 
+    display: block; 
+    margin-bottom: 2px; 
+    color: var(--text-muted); 
+    font-size: 19px; 
+}
+
+.stat-card strong { 
+    display: block;
+    color: var(--text-primary); 
+    font-size: 19px; 
+    font-weight: 600; 
+}
+
