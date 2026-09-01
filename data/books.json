@@ -1,0 +1,54 @@
+{
+    "books": [
+        {
+            "id": "dune",
+            "title": "Dune",
+            "author": "Frank Herbert",
+            "genre": "Ciencia ficción",
+            "year": 1965,
+            "cover": "assets/covers/dune.jpg",
+            "read": false,
+            "favorite": false
+        },
+        {
+            "id": "el-hobbit",
+            "title": "El Hobbit",
+            "author": "J. R. R. Tolkien",
+            "genre": "Fantasía",
+            "year": 1937,
+            "cover": "assets/covers/el-hobbit.jpg",
+            "read": true,
+            "favorite": true
+        },
+        {
+            "id": "fundacion",
+            "title": "Fundación",
+            "author": "Isaac Asimov",
+            "genre": "Ciencia ficción",
+            "year": 1951,
+            "cover": "assets/covers/fundacion.jpg",
+            "read": false,
+            "favorite": false
+        },
+        {
+            "id": "1984",
+            "title": "1984",
+            "author": "George Orwell",
+            "genre": "Distopía",
+            "year": 1949,
+            "cover": "assets/covers/1984.jpg",
+            "read": true,
+            "favorite": false
+        },
+        {
+            "id": "el-nombre-del-viento",
+            "title": "El nombre del viento",
+            "author": "Patrick Rothfuss",
+            "genre": "Fantasía",
+            "year": 2007,
+            "cover": "assets/covers/el-nombre-del-viento.jpg",
+            "read": false,
+            "favorite": true
+        }
+    ]
+}
