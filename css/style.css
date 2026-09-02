@@ -817,6 +817,271 @@ a {
     font-size: 15px;
 }
 
+/* 
+    FICHA INDIVIDUAL DEL LIBRO 
+*/ 
+
+.book-detail { 
+    padding: 1rem 0 4rem; 
+} 
+
+    /* 
+        BOTÓN VOLVER 
+    */ 
+
+.detail-back-button { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 9px; 
+    margin-bottom: 40px; 
+    padding: 9px 0; 
+    background: transparent; 
+    color: var(--text-secondary); 
+    font-size: 13px; 
+    font-weight: 600; 
+    transition: 
+        color var(--transition), 
+        transform var(--transition); 
+} 
+
+.detail-back-button:hover { 
+    color: var(--accent-light); 
+    transform: translateX(-4px); 
+} 
+
+.detail-back-button i { 
+    font-size: 11px; 
+} 
+
+    /*
+        CONTENEDOR PRINCIPAL 
+    */ 
+
+.book-detail-content { 
+    display: grid; 
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); 
+    gap: clamp(35px, 5vw, 75px); 
+    max-width: 1100px; 
+    margin: 0 auto; 
+} 
+
+    /* 
+        PORTADA 
+    */ 
+
+.book-detail-cover { 
+    width: 100%; 
+} 
+
+.book-detail-cover img { 
+    display: block; 
+    width: 100%; 
+    aspect-ratio: 2 / 3; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    border: 1px solid var(--border); 
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 3px 8px rgba(0, 0, 0, 0.2); 
+    transition: 
+        transform 250ms ease, 
+        box-shadow 250ms ease; 
+} 
+
+.book-detail-cover img:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45), 0 5px 12px rgba(0, 0, 0, 0.25); 
+} 
+
+    /* 
+        INFORMACIÓN DEL LIBRO 
+    */ 
+
+.book-detail-info { 
+    min-width: 0; 
+    padding-top: 5px; 
+} 
+
+.book-detail-info .section-eyebrow { 
+    margin-bottom: 10px; 
+} 
+
+.book-detail-info h1 { 
+    margin: 0 0 12px; 
+    font-family: Arial, "Playfair Display", serif; 
+    font-size: clamp(32px, 4vw, 50px); 
+    font-weight: 600; 
+    line-height: 1.08; 
+    letter-spacing: -1.5px; 
+    color: var(--text-primary); 
+} 
+
+.book-detail-author { 
+    margin: 0; 
+    color: var(--text-secondary); 
+    font-size: 17px; 
+    font-weight: 500; 
+} 
+
+    /* 
+        METADATOS 
+    */ 
+
+.book-detail-meta { 
+    display: flex; 
+    flex-wrap: wrap; 
+    align-items: center; 
+    gap: 8px; 
+    margin-top: 22px; 
+} 
+
+.book-detail-meta span { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 6px; 
+    padding: 6px 10px; 
+    background: rgba(255, 255, 255, 0.045); 
+    border: 1px solid var(--border); 
+    border-radius: 8px; 
+    color: var(--text-secondary); 
+    font-size: 11px; 
+    font-weight: 600; 
+} 
+
+.book-detail-meta span i { 
+    color: var(--success); 
+    font-size: 10px; 
+} 
+
+    /* 
+        DESCRIPCIÓN 
+    */ 
+
+.book-detail-description { 
+    max-width: 720px; 
+    margin-top: 30px; 
+    padding-top: 25px; 
+    border-top: 1px solid var(--border); 
+} 
+
+.book-detail-description p { 
+    margin: 0; 
+    color: var(--text-secondary); 
+    font-size: 14px; 
+    line-height: 1.8; 
+} 
+
+    /* 
+        ACCIONES 
+    */ 
+
+.book-detail-actions { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 10px; 
+    margin-top: 30px; 
+} 
+
+.favorite-detail-button, .read-detail-button { 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
+    min-height: 42px; 
+    padding: 0 16px;
+    border: 1px solid var(--border-light); 
+    border-radius: 10px; 
+    background: var(--bg-soft); 
+    color: var(--text-secondary); 
+    font-size: 12px; 
+    font-weight: 600; 
+    transition: 
+        background var(--transition),
+        border-color var(--transition), 
+        color var(--transition), 
+        transform var(--transition); 
+} 
+
+.favorite-detail-button:hover, .read-detail-button:hover { 
+    transform: translateY(-2px); 
+    background: var(--bg-card-hover); 
+    border-color: rgba(201, 166, 107, 0.3); 
+    color: var(--accent-light); 
+} 
+
+.favorite-detail-button i, .read-detail-button i { 
+    font-size: 12px; 
+} 
+
+    /* 
+        ESTADO LEÍDO 
+    */ 
+
+.book-detail-meta span:has(.fa-check) { 
+    background: rgba(140, 167, 124, 0.08); 
+    border-color: rgba(140, 167, 124, 0.15); 
+    color: #b6cbaa; 
+} 
+
+    /* 
+        RESPONSIVE — FICHA 
+    */
+
+@media (max-width: 760px) { 
+    .book-detail { 
+        padding: 0.5rem 0 3rem; 
+    } 
+    
+    .detail-back-button { 
+        margin-bottom: 28px; 
+    } 
+    
+    .book-detail-content { 
+        grid-template-columns: 1fr; 
+        gap: 32px; 
+        max-width: 520px; 
+    } 
+    
+    .book-detail-cover { 
+        width: min(260px, 70vw); 
+        margin: 0 auto; 
+    } 
+    
+    .book-detail-info { 
+        padding-top: 0; 
+    } 
+    
+    .book-detail-info h1 { 
+        font-size: 36px;
+        letter-spacing: -1px; 
+    } 
+    
+    .book-detail-author { 
+        font-size: 15px; 
+    } 
+    
+    .book-detail-meta { 
+        margin-top: 18px; 
+    } 
+    
+    .book-detail-description { 
+        margin-top: 25px; 
+        padding-top: 22px; 
+    } 
+    
+    .book-detail-description p { 
+        font-size: 13px; 
+        line-height: 1.75; 
+    } 
+    
+    .book-detail-actions { 
+        flex-direction: column; 
+        margin-top: 25px; 
+    } 
+    
+    .favorite-detail-button, .read-detail-button { 
+        width: 100%; 
+    } 
+}
+
 /*
     DISEÑO EN TABLET
 */

@@ -4,6 +4,7 @@
 
 let books= [];
 let currentView = "home";
+let previousView = "home";
 
 /* 
     INICIACIÓN
@@ -142,6 +143,152 @@ function renderFavoriteBooks() {
     const view = createLibraryView( "Favoritos", "TU COLECCIÓN", favoriteBooks ); 
     
     mainContent.appendChild( view ); 
+}
+
+/*
+    CARGAR FICHA DEL LIBRO
+*/
+
+function renderBookDetail(book) {
+
+    if (!book) {
+        return;
+    }
+
+    previousView = currentView;
+    currentView = "detail";
+
+    hideHomeSections();
+    removeDynamicView();
+
+    const mainContent = document.querySelector(".main-content");
+
+    if (!mainContent) {
+        return;
+    }
+
+    const view = document.createElement("section");
+    view.className = "book-detail dynamic-view";
+
+    view.innerHTML = `
+        <button class="detail-back-button" type="button">
+            <i class="fa-solid fa-arrow-left"></i>
+            Volver
+        </button>
+
+        <div class="book-detail-content">
+
+            <div class="book-detail-cover">
+                <img
+                    src="${escapeHTML(book.cover || "")}"
+                    alt="Portada de ${escapeHTML(book.title)}"
+                >
+            </div>
+
+            <div class="book-detail-info">
+
+                <span class="section-eyebrow">
+                    ${escapeHTML(book.genre || "LIBRO")}
+                </span>
+
+                <h1>${escapeHTML(book.title)}</h1>
+
+                <p class="book-detail-author">
+                    ${escapeHTML(book.author || "Autor desconocido")}
+                </p>
+
+                <div class="book-detail-meta">
+                    ${book.year ? `<span>${escapeHTML(String(book.year))}</span>` : ""}
+                    ${book.read ? `<span><i class="fa-solid fa-check"></i> Leído</span>` : ""}
+                </div>
+
+                ${
+                    book.description
+                        ? `
+                            <div class="book-detail-description">
+                                <p>${escapeHTML(book.description)}</p>
+                            </div>
+                        `
+                        : ""
+                }
+
+                <div class="book-detail-actions">
+
+                    <button class="favorite-detail-button" type="button">
+                        ${
+                            book.favorite
+                                ? `<i class="fa-solid fa-star"></i> Quitar de favoritos`
+                                : `<i class="fa-regular fa-star"></i> Añadir a favoritos`
+                        }
+                    </button>
+
+                    <button class="read-detail-button" type="button">
+                        ${
+                            book.read
+                                ? `<i class="fa-solid fa-check"></i> Marcar como no leído`
+                                : `<i class="fa-regular fa-circle-check"></i> Marcar como leído`
+                        }
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    //Boton para volver atrás
+    const backButton = view.querySelector(".detail-back-button");
+
+    backButton.addEventListener("click", () => {
+
+        if (currentView !== "detail") {
+            return;
+        }
+
+        // Volvemos a la vista desde la que abrimos el libro.
+        switch (previousView) {
+
+            case "home":
+                setActiveNavByText("Inicio");
+                renderHome();
+                break;
+
+            case "all":
+                setActiveNavByText("Todos los libros");
+                renderAllBooks();
+                break;
+
+            case "favorites":
+                setActiveNavByText("Favoritos");
+                renderFavoriteBooks();
+                break;
+
+            case "read":
+                setActiveNavByText("Leídos");
+                renderReadBooks();
+                break;
+
+            default:
+                setActiveNavByText("Inicio");
+                renderHome();
+                break;
+        }
+    });
+
+    //Favoritos sigue siendo una acción disponible desde la ficha.
+    const favoriteButton = view.querySelector(".favorite-detail-button");
+
+    favoriteButton.addEventListener("click", () => {
+        toggleFavorite(book.id);
+        renderBookDetail(book);
+    });
+
+    const readButton = view.querySelector(".read-detail-button");
+
+    readButton.addEventListener("click", () => {
+        toggleRead(book.id);
+        renderBookDetail(book);
+    });
+
+    mainContent.appendChild(view);
 }
 
 /*
@@ -311,7 +458,7 @@ function createBookCard(book) {
 
     /*Muestra el libro seleccionado por consola*/
     article.addEventListener( "click", () => { 
-        console.log( "Libro seleccionado:", book ); 
+        renderBookDetail(book); 
     });
 
     return article; 
@@ -341,6 +488,30 @@ function toggleFavorite( bookId ) {
     updateStatistics(); 
     
     refreshCurrentView(); 
+}
+
+/*
+    LEÍDO
+*/
+
+function toggleRead(bookId) {
+
+    const book = books.find(item => item.id === bookId);
+
+    if (!book) {
+        return;
+    }
+
+    book.read = !book.read;
+
+    console.log(
+        `${book.title}:`,
+        book.read
+            ? "Marcado como leído"
+            : "Marcado como no leído"
+    );
+
+    updateStatistics();
 }
 
 /*
