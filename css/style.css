@@ -1128,6 +1128,40 @@ a {
     .author-section h2 {
         font-size: 21px;
     }
+
+    .genre-section h2 {
+        font-size: 21px;
+    }
+}
+
+/*
+    GÉNEROS
+*/
+
+.genres-view {
+    margin-top: 0;
+}
+
+.genres-list {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.genre-section {
+    margin: 0;
+}
+
+.genre-section .section-header {
+    margin-bottom: 22px;
+}
+
+.genre-section .section-eyebrow {
+    margin-bottom: 6px;
+}
+
+.genre-section h2 {
+    font-size: 24px;
 }
 
 /*

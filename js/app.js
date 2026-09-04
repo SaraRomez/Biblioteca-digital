@@ -285,6 +285,125 @@ function renderAuthors() {
 }
 
 /*
+    CARGAR GENEROS
+*/
+
+/*
+    CARGAR GÉNEROS
+*/
+
+function renderGenres() {
+    currentView = "genres";
+    hideHomeSections();
+    removeDynamicView();
+
+    const mainContent = document.querySelector(".main-content");
+
+    if (!mainContent) {
+        return;
+    }
+
+    const genres = [
+        ...new Set(
+            books
+                .map(book => book.genre)
+                .filter(Boolean)
+        )
+    ];
+
+    const section = document.createElement("section");
+    section.className = "genres-view dynamic-view";
+
+    section.innerHTML = `
+        <div class="section-header">
+            <div>
+                <span class="section-eyebrow">
+                    TU BIBLIOTECA
+                </span>
+
+                <h2>
+                    Géneros
+                </h2>
+            </div>
+
+            <span class="view-count">
+                ${genres.length}
+                ${genres.length === 1 ? "género" : "géneros"}
+            </span>
+        </div>
+
+        <div class="genres-list"></div>
+    `;
+
+    const genresList = section.querySelector(".genres-list");
+
+    if (genres.length === 0) {
+
+        genresList.innerHTML = `
+            <div class="inline-empty-state">
+                <div class="empty-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+                <h3>
+                    No hay géneros todavía
+                </h3>
+
+                <p>
+                    Cuando añadas libros, sus géneros aparecerán aquí.
+                </p>
+            </div>
+        `;
+
+    } else {
+
+        genres.forEach(genre => {
+
+            const genreBooks = books.filter(
+                book => book.genre === genre
+            );
+
+            const genreSection = document.createElement("section");
+            genreSection.className = "library-section genre-section";
+
+            genreSection.innerHTML = `
+                <div class="section-header">
+                    <div>
+                        <span class="section-eyebrow">
+                            GÉNERO
+                        </span>
+
+                        <h2>
+                            ${escapeHTML(genre)}
+                        </h2>
+                    </div>
+
+                    <span class="view-count">
+                        ${genreBooks.length}
+                        ${genreBooks.length === 1 ? "libro" : "libros"}
+                    </span>
+                </div>
+
+                <div class="books-grid genre-books-grid"></div>
+            `;
+
+            const booksGrid = genreSection.querySelector(
+                ".genre-books-grid"
+            );
+
+            genreBooks.forEach(book => {
+                const card = createBookCard(book);
+                booksGrid.appendChild(card);
+            });
+
+            genresList.appendChild(genreSection);
+        });
+    }
+
+    mainContent.insertBefore(section,document.querySelector(".footer"));
+}
+
+/*
     CARGAR RESULTADOS DE BUSQUEDA
 */
 
@@ -784,7 +903,7 @@ function setupNavigation() {
                     renderAuthors(); 
                     break; 
                 case "Géneros": 
-                    console.log( "Vista Géneros: próximamente" ); 
+                    renderGenres(); 
                     break; 
             } 
         }); 
@@ -1001,6 +1120,9 @@ function refreshCurrentView() {
             break;
         case "authors":
             renderAuthors();
+            break;
+        case "genres":
+            renderGenres();
             break;
         case "search": 
             renderSearchResults( currentSearchTerm ); 
