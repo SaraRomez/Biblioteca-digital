@@ -114,7 +114,7 @@ function renderAllBooks() {
 
     const view = createLibraryView( "Todos los libros", "TU COLECCIÓN", books );
     
-    mainContent.appendChild( view ); 
+    mainContent.insertBefore(view, document.querySelector(".footer")); 
 }
 
 /*
@@ -133,7 +133,7 @@ function renderReadBooks() {
     /* Utilizamos la misma tarjeta que en Inicio y Todos los libros.*/ 
     const view = createLibraryView( "Libros leídos", "TU HISTORIAL", readBooks ); 
     
-    mainContent.appendChild( view ); 
+    mainContent.insertBefore( view, document.querySelector(".footer") );
 }
 
 /*
@@ -152,7 +152,7 @@ function renderFavoriteBooks() {
     /* Misma tarjeta visual que en el resto de la aplicación.*/ 
     const view = createLibraryView( "Favoritos", "TU COLECCIÓN", favoriteBooks ); 
     
-    mainContent.appendChild( view ); 
+    mainContent.insertBefore( view, document.querySelector(".footer") ); 
 }
 
 /*
@@ -281,7 +281,7 @@ function renderAuthors() {
         });
     }
 
-    mainContent.appendChild(section);
+    mainContent.insertBefore(section, document.querySelector(".footer"));
 }
 
 /*
@@ -365,7 +365,7 @@ function renderSearchResults(searchTerm) {
         }); 
     } 
     
-    mainContent.appendChild(section); 
+    mainContent.insertBefore(section, document.querySelector(".footer")); 
 }
 
 /*
@@ -901,6 +901,7 @@ function setActiveNavByText( text ) {
 */
 
 function hideHomeSections() { 
+    hideHomeHeader();
     const recentSection = document .getElementById( "recent-books" ) ?.closest( ".library-section" ); 
     const readSection = document .getElementById( "read-books" ) ?.closest( ".library-section" ); 
     
@@ -939,7 +940,7 @@ function showHomeSections() {
 }
 
 /*
-    VISTA DE BUSQUEDA
+    MOSTRAR/OCULTAR HERO Y ESTADISTICAS
 */
 
 function hideHomeHeader() {
