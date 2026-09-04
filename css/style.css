@@ -1083,6 +1083,51 @@ a {
 }
 
 /*
+    AUTORES
+*/
+
+.authors-view {
+    margin-top: 0;
+}
+
+.authors-list {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.author-section {
+    margin: 0;
+}
+
+.author-section .section-header {
+    margin-bottom: 22px;
+}
+
+.author-section .section-eyebrow {
+    margin-bottom: 6px;
+}
+
+.author-section h2 {
+    font-size: 24px;
+}
+
+.author-books-grid {
+    margin-top: 0;
+}
+
+@media (max-width: 760px) {
+
+    .authors-list {
+        gap: 40px;
+    }
+
+    .author-section h2 {
+        font-size: 21px;
+    }
+}
+
+/*
     DISEÑO EN TABLET
 */
 

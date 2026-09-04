@@ -156,6 +156,135 @@ function renderFavoriteBooks() {
 }
 
 /*
+    CARGAR AUTORES
+*/
+
+function renderAuthors() {
+    currentView = "authors";
+    hideHomeSections();
+    removeDynamicView();
+
+    const mainContent = document.querySelector(".main-content");
+
+    if (!mainContent) {
+        return;
+    }
+
+    /* 
+        Obtenemos los autores únicos de la biblioteca.
+        El Set evita que un mismo autor aparezca varias veces.
+    */
+    const authors = [
+        ...new Set(
+            books
+                .map(book => book.author)
+                .filter(Boolean)
+        )
+    ];
+
+    const section = document.createElement("section");
+    section.className = "authors-view dynamic-view";
+
+    section.innerHTML = `
+        <div class="section-header">
+            <div>
+                <span class="section-eyebrow">
+                    TU BIBLIOTECA
+                </span>
+
+                <h2>
+                    Autores
+                </h2>
+            </div>
+
+            <span class="view-count">
+                ${authors.length}
+                ${authors.length === 1 ? "autor" : "autores"}
+            </span>
+        </div>
+
+        <div class="authors-list"></div>
+    `;
+
+    const authorsList = section.querySelector(".authors-list");
+
+    /*
+        Si no hay autores.
+    */
+    if (authors.length === 0) {
+
+        authorsList.innerHTML = `
+            <div class="inline-empty-state">
+                <div class="empty-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <h3>
+                    No hay autores todavía
+                </h3>
+
+                <p>
+                    Cuando añadas libros, sus autores aparecerán aquí.
+                </p>
+            </div>
+        `;
+
+    } else {
+
+        /*
+            Creamos una sección para cada autor.
+        */
+        authors.forEach(author => {
+
+            const authorBooks = books.filter(
+                book => book.author === author
+            );
+
+            const authorSection = document.createElement("section");
+            authorSection.className = "library-section author-section";
+
+            authorSection.innerHTML = `
+                <div class="section-header">
+                    <div>
+                        <span class="section-eyebrow">
+                            AUTOR
+                        </span>
+
+                        <h2>
+                            ${escapeHTML(author)}
+                        </h2>
+                    </div>
+
+                    <span class="view-count">
+                        ${authorBooks.length}
+                        ${authorBooks.length === 1 ? "libro" : "libros"}
+                    </span>
+                </div>
+
+                <div class="books-grid author-books-grid"></div>
+            `;
+
+            const booksGrid = authorSection.querySelector(
+                ".author-books-grid"
+            );
+
+            /*
+                Utilizamos exactamente las mismas tarjetas
+                que ya utiliza el resto de Libraria.
+            */
+            authorBooks.forEach(book => {
+                const card = createBookCard(book);
+                booksGrid.appendChild(card);
+            });
+
+            authorsList.appendChild(authorSection);
+        });
+    }
+
+    mainContent.appendChild(section);
+}
+
+/*
     CARGAR RESULTADOS DE BUSQUEDA
 */
 
@@ -339,31 +468,29 @@ function renderBookDetail(book) {
 
         // Volvemos a la vista desde la que abrimos el libro.
         switch (previousView) {
-
             case "home":
                 setActiveNavByText("Inicio");
                 renderHome();
                 break;
-
             case "all":
                 setActiveNavByText("Todos los libros");
                 renderAllBooks();
                 break;
-
             case "favorites":
                 setActiveNavByText("Favoritos");
                 renderFavoriteBooks();
                 break;
-
             case "read":
                 setActiveNavByText("Leídos");
                 renderReadBooks();
                 break;
-
+            case "authors":
+                setActiveNavByText("Autores");
+                renderAuthors();
+                break;
             case "search": 
                 renderSearchResults( currentSearchTerm ); 
                 break;
-
             default:
                 setActiveNavByText("Inicio");
                 renderHome();
@@ -654,7 +781,7 @@ function setupNavigation() {
                     renderReadBooks(); 
                     break; 
                 case "Autores": 
-                    console.log( "Vista Autores: próximamente" ); 
+                    renderAuthors(); 
                     break; 
                 case "Géneros": 
                     console.log( "Vista Géneros: próximamente" ); 
@@ -870,6 +997,9 @@ function refreshCurrentView() {
             break; 
         case "favorites": 
             renderFavoriteBooks(); 
+            break;
+        case "authors":
+            renderAuthors();
             break;
         case "search": 
             renderSearchResults( currentSearchTerm ); 
