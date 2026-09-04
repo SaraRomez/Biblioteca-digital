@@ -5,6 +5,7 @@
 let books= [];
 let currentView = "home";
 let previousView = "home";
+let currentSearchTerm = "";
 
 /* 
     INICIACIÓN
@@ -13,6 +14,7 @@ let previousView = "home";
 document.addEventListener("DOMContentLoaded", () => {
     loadBooks();
     setupNavigation();
+    setupSearch();
 });
 
 /*
@@ -75,7 +77,15 @@ function updateStatistics() {
 function renderHome() { 
     currentView = "home"; 
     showHomeSections();
+    showHomeHeader();
 
+    currentSearchTerm = "";
+    const searchInput = document.getElementById("global-search"); 
+    
+    if (searchInput) {
+        searchInput.value = ""; 
+    }
+    
     /*Libros añadidos recientemente*/
     const recentBooks = books.slice(0, 8); 
     renderBooksInto( "recent-books", recentBooks );
@@ -143,6 +153,90 @@ function renderFavoriteBooks() {
     const view = createLibraryView( "Favoritos", "TU COLECCIÓN", favoriteBooks ); 
     
     mainContent.appendChild( view ); 
+}
+
+/*
+    CARGAR RESULTADOS DE BUSQUEDA
+*/
+
+function renderSearchResults(searchTerm) { 
+    const term = searchTerm .trim() .toLowerCase(); 
+    
+    /* Si no hay texto de búsqueda, volvemos a Inicio. */ 
+    if (!term) { 
+        currentSearchTerm = ""; 
+        renderHome(); 
+        setActiveNavByText("Inicio"); 
+        return; 
+    } 
+    
+    /* Guardamos la búsqueda actual. */ 
+    currentSearchTerm = searchTerm.trim(); 
+    currentView = "search"; 
+    hideHomeSections();
+    hideHomeHeader();
+    removeDynamicView(); 
+    
+    const mainContent = document.querySelector( ".main-content" ); 
+    
+    if (!mainContent) { 
+        return; 
+    } 
+    
+    /* Buscamos por: - título - autor - género - año */ 
+    const results = books.filter(book => { 
+        const title = 
+            String( book.title || "" ).toLowerCase(); 
+        const author = 
+            String( book.author || "" ).toLowerCase(); 
+        const genre = 
+            String( book.genre || "" ).toLowerCase(); 
+        const year = 
+            String( book.year || "" ).toLowerCase(); 
+        return ( 
+            title.includes(term) || 
+            author.includes(term) || 
+            genre.includes(term) || 
+            year.includes(term) 
+        );
+    }); 
+    
+    /* Creamos la sección de resultados. */ 
+    const section = document.createElement("section"); 
+    section.className = "library-section dynamic-view"; 
+    section.innerHTML = ` 
+        <div class="section-header"> 
+            <div> 
+                <span class="section-eyebrow"> BÚSQUEDA </span> 
+                <h2> Resultados para "${escapeHTML(searchTerm)}" </h2> 
+            </div> 
+            <span class="view-count"> ${results.length} ${ results.length === 1 ? "libro" : "libros" } </span> 
+        </div> 
+        <div class="books-grid dynamic-books-grid"></div> 
+    `; 
+    
+    const grid = section.querySelector( ".dynamic-books-grid" ); 
+    
+    /* SIN RESULTADOS */ 
+    if (results.length === 0) { 
+        grid.innerHTML = ` 
+            <div class="inline-empty-state"> 
+                <div class="empty-icon"> 
+                    <i class="fa-solid fa-magnifying-glass"></i> 
+                </div> 
+                <h3> No encontramos ningún libro </h3> 
+                <p> Prueba con otro título, autor, género o año. </p> 
+            </div> 
+        `; 
+    } else { 
+        /* MOSTRAR RESULTADOS */ 
+        results.forEach(book => { 
+            const card = createBookCard(book); 
+            grid.appendChild(card); 
+        }); 
+    } 
+    
+    mainContent.appendChild(section); 
 }
 
 /*
@@ -264,6 +358,10 @@ function renderBookDetail(book) {
             case "read":
                 setActiveNavByText("Leídos");
                 renderReadBooks();
+                break;
+
+            case "search": 
+                renderSearchResults( currentSearchTerm ); 
                 break;
 
             default:
@@ -487,6 +585,13 @@ function toggleFavorite( bookId ) {
     /* Actualizamos las estadísticas.*/ 
     updateStatistics(); 
     
+    if (currentView === "detail") { 
+        const savedPreviousView = previousView; 
+        renderBookDetail(book);
+        previousView = savedPreviousView; 
+        return; 
+    }
+    /*Actualizamos la vista actual*/
     refreshCurrentView(); 
 }
 
@@ -512,6 +617,15 @@ function toggleRead(bookId) {
     );
 
     updateStatistics();
+
+    if (currentView === "detail") { 
+        const savedPreviousView = previousView; 
+        renderBookDetail(book); 
+        previousView = savedPreviousView; 
+        return; 
+    }
+
+    refreshCurrentView();
 }
 
 /*
@@ -575,6 +689,56 @@ function setupNavigation() {
                 renderAllBooks(); 
             } 
         }); 
+    }); 
+}
+
+/*
+    BUSCADOR
+*/
+
+function setupSearch() { 
+    const searchInput = document.getElementById( "global-search" ); 
+    
+    if (!searchInput) { 
+        return; 
+    } 
+    
+    /*Buscar mientras escribimos.*/ 
+    searchInput.addEventListener( "input", () => { 
+        const value = searchInput.value.trim(); 
+        
+        /*Si está vacío, volvemos a Inicio.*/ 
+        if (!value) { 
+            currentSearchTerm = ""; 
+            renderHome(); 
+            setActiveNavByText( "Inicio" ); 
+            return; 
+        } 
+        
+        /*Mostramos resultados.*/ 
+        renderSearchResults(value); 
+    }); 
+    
+    /*ENTER → confirmar búsqueda*/
+    searchInput.addEventListener( "keydown", event => { 
+        if (event.key === "Enter") { 
+            event.preventDefault(); 
+            const value = searchInput.value.trim(); 
+            
+            if (value) { 
+                renderSearchResults( value ); 
+            } 
+        } 
+    }); 
+    
+    /*ESC → limpiar búsqueda*/ 
+    searchInput.addEventListener( "keydown", event => { 
+        if (event.key === "Escape") { 
+            searchInput.value = ""; 
+            currentSearchTerm = ""; 
+            renderHome(); 
+            setActiveNavByText( "Inicio" ); 
+        } 
     }); 
 }
 
@@ -648,6 +812,36 @@ function showHomeSections() {
 }
 
 /*
+    VISTA DE BUSQUEDA
+*/
+
+function hideHomeHeader() {
+    const hero = document.querySelector(".hero");
+    const stats = document.querySelector(".stats-grid");
+
+    if (hero) {
+        hero.hidden = true;
+    }
+
+    if (stats) {
+        stats.hidden = true;
+    }
+}
+
+function showHomeHeader() {
+    const hero = document.querySelector(".hero");
+    const stats = document.querySelector(".stats-grid");
+
+    if (hero) {
+        hero.hidden = false;
+    }
+
+    if (stats) {
+        stats.hidden = false;
+    }
+}
+
+/*
     ELIMINAR VISTA DINÁMICA
 */
 
@@ -676,7 +870,10 @@ function refreshCurrentView() {
             break; 
         case "favorites": 
             renderFavoriteBooks(); 
-            break; 
+            break;
+        case "search": 
+            renderSearchResults( currentSearchTerm ); 
+            break;
     } 
 }
 
