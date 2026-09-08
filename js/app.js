@@ -32,6 +32,8 @@ async function loadBooks() {
         const data = await response.json(); 
         books = data.books || [];
         
+        loadSavedStates();
+
         console.log("Catálogo cargado:", books); 
 
         updateStatistics();
@@ -41,6 +43,58 @@ async function loadBooks() {
     } catch (error) { 
         console.error( "Error cargando el catálogo:", error ); 
     } 
+}
+
+/*
+    CARGAR ESTADOS GUARDADOS
+*/
+
+function loadSavedStates() {
+    const savedStates = localStorage.getItem("libraria-book-states");
+
+    if(!savedStates) {
+        return;
+    }
+
+    try {
+        const states = JSON.parse(savedStates);
+
+        books.forEach(book => {
+            const savedState = states[book.id];
+
+            if(!savedState) {
+                return;
+            }
+
+            if(typeof savedState.favorite === "boolean") {
+                book.favorite = savedState.favorite;
+            }
+
+            if(typeof savedState.read === "boolean") {
+                book.read = savedState.read;
+            }
+        });
+
+    } catch (error) {
+        console.error("No se pudieron cargar los estados guardados: ", error);
+    }
+}
+
+/*
+    GUARDAR ESTADOS
+*/  
+
+function saveBookStates() {
+    const states = {};
+
+    books.forEach(book => {
+        states[book.id] = {
+            favorite: Boolean(book.favorite),
+            read: Boolean(book.read)
+        };
+    });
+
+    localStorage.setItem("libraria-book-states", JSON.stringify(states));
 }
 
 /*
@@ -821,6 +875,7 @@ function toggleFavorite( bookId ) {
 
     /* Cambiamos true ↔ false.*/ 
     book.favorite = !book.favorite; 
+    saveBookStates();
     console.log(
         `${book.title}:`, 
         book.favorite 
@@ -854,6 +909,7 @@ function toggleRead(bookId) {
     }
 
     book.read = !book.read;
+    saveBookStates();
 
     console.log(
         `${book.title}:`,
