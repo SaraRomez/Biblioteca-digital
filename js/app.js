@@ -339,10 +339,6 @@ function renderAuthors() {
 }
 
 /*
-    CARGAR GENEROS
-*/
-
-/*
     CARGAR GÉNEROS
 */
 
@@ -686,7 +682,7 @@ function renderBookDetail(book) {
         renderBookDetail(book);
     });
 
-    mainContent.appendChild(view);
+    mainContent.insertBefore( view, document.querySelector(".footer") );
 }
 
 /*
