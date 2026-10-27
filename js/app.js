@@ -704,12 +704,20 @@ function renderSearchResults(searchTerm) {
         const genre = 
             String( book.genre || "" ).toLowerCase(); 
         const year = 
-            String( book.year || "" ).toLowerCase(); 
+            String( book.year || "" ).toLowerCase();
+        const series = String(
+            book.series ||
+            book.saga ||
+            book.serie ||
+            ""
+        ).toLowerCase();
+
         return ( 
             title.includes(term) || 
             author.includes(term) || 
             genre.includes(term) || 
-            year.includes(term) 
+            year.includes(term) ||
+            series.includes(term)
         );
     }); 
     
