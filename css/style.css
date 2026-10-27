@@ -1165,6 +1165,58 @@ a {
 }
 
 /*
+    AUTOCONCLUSIVOS
+*/
+
+.standalone-view {
+    margin-top: 0;
+}
+
+/*
+    SAGAS
+*/
+
+.sagas-view {
+    margin-top: 0;
+}
+
+.sagas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.saga-section {
+    margin: 0;
+}
+
+.saga-section .section-header {
+    margin-bottom: 22px;
+}
+
+.saga-section .section-eyebrow {
+    margin-bottom: 6px;
+}
+
+.saga-section h2 {
+    font-size: 24px;
+}
+
+.saga-books-grid {
+    margin-top: 0;
+}
+
+@media (max-width: 760px) {
+    .sagas-list {
+        gap: 40px;
+    }
+
+    .saga-section h2 {
+        font-size: 21px;
+    }
+}
+
+/*
     DISEÑO EN TABLET
 */
 

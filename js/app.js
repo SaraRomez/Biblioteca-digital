@@ -454,6 +454,220 @@ function renderGenres() {
 }
 
 /*
+    FUNCIONES AUXILIARES PARA LAS SAGAS
+*/
+
+function getBookSeriesName(book) {
+    return String(
+        book.series ||
+        book.saga ||
+        book.serie ||
+        ""
+    ).trim();
+}
+
+function getBookSeriesNumber(book) {
+    return (
+        book.seriesNumber ??
+        book.series_number ??
+        book.numberInSeries ??
+        book.number ??
+        ""
+    );
+}
+
+function compareSeriesBooks(a, b) {
+    const numberA = String(getBookSeriesNumber(a)).trim();
+    const numberB = String(getBookSeriesNumber(b)).trim();
+
+    const valueA = numberA === ""
+        ? null
+        : Number(numberA.replace(",", "."));
+
+    const valueB = numberB === ""
+        ? null
+        : Number(numberB.replace(",", "."));
+
+    // Los libros numerados aparecen antes que los no numerados.
+    if (valueA === null && valueB !== null) return 1;
+    if (valueA !== null && valueB === null) return -1;
+
+    if (
+        valueA !== null &&
+        valueB !== null &&
+        Number.isFinite(valueA) &&
+        Number.isFinite(valueB) &&
+        valueA !== valueB
+    ) {
+        return valueA - valueB;
+    }
+
+    return String(a.title || "").localeCompare(
+        String(b.title || ""),
+        "es",
+        { sensitivity: "base" }
+    );
+}
+
+/*
+    CARGAR AUTOCONCLUSIVOS
+*/
+
+function renderStandaloneBooks() {
+    currentView = "standalone";
+    hideHomeSections();
+    removeDynamicView();
+
+    const mainContent = document.querySelector(".main-content");
+
+    if (!mainContent) return;
+
+    const standaloneBooks = books.filter(book => {
+        const seriesName = getBookSeriesName(book);
+        const seriesNumber = String(
+            getBookSeriesNumber(book)
+        ).trim();
+
+        return !seriesName && !seriesNumber;
+    });
+
+    const view = createLibraryView(
+        "Autoconclusivos",
+        "TU COLECCIÓN",
+        standaloneBooks
+    );
+
+    mainContent.insertBefore(view, document.querySelector(".footer"));
+}
+
+/*
+    CARGAR SAGAS
+*/
+
+function renderSagas() {
+    currentView = "sagas";
+    hideHomeSections();
+    removeDynamicView();
+
+    const mainContent = document.querySelector(".main-content");
+
+    if (!mainContent) return;
+
+    // Agrupamos los libros por nombre de saga.
+    const seriesMap = new Map();
+
+    books.forEach(book => {
+        const seriesName = getBookSeriesName(book);
+
+        // Los libros sin saga no aparecen en esta pestaña.
+        if (!seriesName) return;
+
+        const key = seriesName.toLocaleLowerCase("es");
+
+        if (!seriesMap.has(key)) {
+            seriesMap.set(key, {
+                name: seriesName,
+                books: []
+            });
+        }
+
+        seriesMap.get(key).books.push(book);
+    });
+
+    // Orden alfabético por nombre de saga.
+    const seriesList = [...seriesMap.values()].sort(
+        (a, b) => a.name.localeCompare(
+            b.name,
+            "es",
+            { sensitivity: "base" }
+        )
+    );
+
+    const section = document.createElement("section");
+    section.className = "sagas-view dynamic-view";
+
+    section.innerHTML = `
+        <div class="section-header">
+            <div>
+                <span class="section-eyebrow">
+                    TU BIBLIOTECA
+                </span>
+
+                <h2>Sagas</h2>
+            </div>
+
+            <span class="view-count">
+                ${seriesList.length}
+                ${seriesList.length === 1 ? "saga" : "sagas"}
+            </span>
+        </div>
+
+        <div class="sagas-list"></div>
+    `;
+
+    const sagasList = section.querySelector(".sagas-list");
+
+    if (seriesList.length === 0) {
+        sagasList.innerHTML = `
+            <div class="inline-empty-state">
+                <div class="empty-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <h3>No hay sagas todavía</h3>
+
+                <p>
+                    Cuando añadas libros con una saga asignada,
+                    aparecerán aquí agrupados por saga.
+                </p>
+            </div>
+        `;
+    } else {
+        seriesList.forEach(series => {
+            // Ordenamos las entregas dentro de cada saga.
+            const seriesBooks = [...series.books].sort(
+                compareSeriesBooks
+            );
+
+            const sagaSection = document.createElement("section");
+            sagaSection.className = "library-section saga-section";
+
+            sagaSection.innerHTML = `
+                <div class="section-header">
+                    <div>
+                        <span class="section-eyebrow">
+                            SAGA
+                        </span>
+
+                        <h2>${escapeHTML(series.name)}</h2>
+                    </div>
+
+                    <span class="view-count">
+                        ${seriesBooks.length}
+                        ${seriesBooks.length === 1 ? "libro" : "libros"}
+                    </span>
+                </div>
+
+                <div class="books-grid saga-books-grid"></div>
+            `;
+
+            const booksGrid = sagaSection.querySelector(
+                ".saga-books-grid"
+            );
+
+            // Reutilizamos las tarjetas actuales de Libraria.
+            seriesBooks.forEach(book => {
+                booksGrid.appendChild(createBookCard(book));
+            });
+
+            sagasList.appendChild(sagaSection);
+        });
+    }
+
+    mainContent.insertBefore(section, document.querySelector(".footer"));
+}
+
+/*
     CARGAR RESULTADOS DE BUSQUEDA
 */
 
@@ -641,25 +855,41 @@ function renderBookDetail(book) {
                 setActiveNavByText("Inicio");
                 renderHome();
                 break;
+
             case "all":
                 setActiveNavByText("Todos los libros");
                 renderAllBooks();
                 break;
+
             case "favorites":
                 setActiveNavByText("Favoritos");
                 renderFavoriteBooks();
                 break;
+
             case "read":
                 setActiveNavByText("Leídos");
                 renderReadBooks();
                 break;
+
             case "authors":
                 setActiveNavByText("Autores");
                 renderAuthors();
                 break;
+
             case "search": 
                 renderSearchResults( currentSearchTerm ); 
                 break;
+
+            case "standalone":
+                setActiveNavByText("AutoConclusivos");
+                renderStandaloneBooks();
+                break;
+
+            case "sagas":
+                setActiveNavByText("Sagas");
+                renderSagas();
+                break; 
+
             default:
                 setActiveNavByText("Inicio");
                 renderHome();
@@ -930,7 +1160,7 @@ function toggleRead(bookId) {
     NAVEGACIÓN
 */
 
-function setupNavigation() { 
+function setupNavigation() {
     const navItems = document.querySelectorAll( ".main-nav .nav-item" ); 
     
     navItems.forEach( item => { 
@@ -942,21 +1172,34 @@ function setupNavigation() {
                 case "Inicio": 
                     renderHome(); 
                     break; 
+
                 case "Todos los libros": 
                     renderAllBooks(); 
                     break; 
+
                 case "Favoritos": 
                     renderFavoriteBooks(); 
                     break; 
+
                 case "Leídos": 
                     renderReadBooks(); 
                     break; 
+
                 case "Autores": 
                     renderAuthors(); 
                     break; 
+
                 case "Géneros": 
                     renderGenres(); 
-                    break; 
+                    break;
+
+                case "AutoConclusivos":
+                    renderStandaloneBooks();
+                    break;
+
+                case "Sagas":
+                    renderSagas();
+                    break;
             } 
         }); 
     });
@@ -1160,25 +1403,40 @@ function refreshCurrentView() {
     switch (currentView) { 
         case "home": 
             renderHome(); 
-            break; 
+            break;
+
         case "all": 
             renderAllBooks(); 
-            break; 
+            break;
+
         case "read": 
             renderReadBooks(); 
             break; 
+
         case "favorites": 
             renderFavoriteBooks(); 
             break;
+
         case "authors":
             renderAuthors();
             break;
+
         case "genres":
             renderGenres();
             break;
+        
+        case "standalone":
+            renderStandaloneBooks();
+            break;
+
+        case "sagas":
+            renderSagas();
+            break;
+
         case "search": 
             renderSearchResults( currentSearchTerm ); 
             break;
+
     } 
 }
 
