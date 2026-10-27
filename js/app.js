@@ -780,7 +780,18 @@ function renderBookDetail(book) {
     if (!mainContent) {
         return;
     }
-
+    
+    const seriesName = String(
+        book.series ||
+        book.saga ||
+        book.serie ||
+        ""
+    ).trim();
+    const seriesNumber =
+        book.seriesNumber ??
+        book.series_number ??
+        book.numberInSeries ??
+        "";
     const view = document.createElement("section");
     view.className = "book-detail dynamic-view";
 
@@ -812,6 +823,8 @@ function renderBookDetail(book) {
                 </p>
 
                 <div class="book-detail-meta">
+                    ${seriesName ? `<span>${escapeHTML(seriesName)}</span>` : ""}
+                    ${seriesName && String(seriesNumber).trim() !== "" ? `<span>${escapeHTML(String(seriesNumber))}</span>` : ""}
                     ${book.year ? `<span>${escapeHTML(String(book.year))}</span>` : ""}
                     ${book.read ? `<span><i class="fa-solid fa-check"></i> Leído</span>` : ""}
                 </div>
